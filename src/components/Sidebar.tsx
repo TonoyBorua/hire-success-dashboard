@@ -9,13 +9,15 @@ import {
   BarChart3, 
   Settings,
   LogOut,
-  ClipboardCheck
+  ClipboardCheck,
+  FileBarChart
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Resume Review', href: '/resume-review', icon: FileText },
+  { name: 'Resume Report', href: '/resume-report', icon: FileBarChart },
   { name: 'Create Interview', href: '/create-interview', icon: Video },
   { name: 'Interview Taking', href: '/interview-taking', icon: Users },
   { name: 'Interview Report', href: '/interview-report', icon: ClipboardCheck },

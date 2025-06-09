@@ -9,6 +9,7 @@ import ResumeReview from "./pages/ResumeReview";
 import CreateInterview from "./pages/CreateInterview";
 import InterviewTaking from "./pages/InterviewTaking";
 import InterviewReport from "./pages/InterviewReport";
+import ResumeReport from "./pages/ResumeReport";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
@@ -24,8 +25,10 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/resume-review" element={<ResumeReview />} />
+          <Route path="/resume-report" element={<ResumeReport />} />
           <Route path="/create-interview" element={<CreateInterview />} />
           <Route path="/interview-taking" element={<InterviewTaking />} />
+          <Route path="/interview-report" element={<InterviewReport />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
