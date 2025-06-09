@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import ResumeReview from "./pages/ResumeReview";
 import CreateInterview from "./pages/CreateInterview";
 import InterviewTaking from "./pages/InterviewTaking";
+import InterviewReport from "./pages/InterviewReport";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";

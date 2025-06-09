@@ -8,7 +8,8 @@ import {
   Users, 
   BarChart3, 
   Settings,
-  LogOut
+  LogOut,
+  ClipboardCheck
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +18,7 @@ const navigation = [
   { name: 'Resume Review', href: '/resume-review', icon: FileText },
   { name: 'Create Interview', href: '/create-interview', icon: Video },
   { name: 'Interview Taking', href: '/interview-taking', icon: Users },
+  { name: 'Interview Report', href: '/interview-report', icon: ClipboardCheck },
   { name: 'Analytics', href: '/analytics', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
