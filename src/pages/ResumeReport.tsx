@@ -1,6 +1,6 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
+import ProtectedPage from '@/components/ProtectedPage';
 import PageHeader from '@/components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -115,7 +115,7 @@ const ResumeReport = () => {
     }
   };
 
-  return (
+  const reportContent = (
     <Layout>
       <PageHeader 
         title="Resume Analysis Report" 
@@ -370,6 +370,12 @@ const ResumeReport = () => {
         </Card>
       </div>
     </Layout>
+  );
+
+  return (
+    <ProtectedPage feature="resume-report">
+      {reportContent}
+    </ProtectedPage>
   );
 };
 

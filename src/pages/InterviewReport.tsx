@@ -1,6 +1,6 @@
-
 import React from 'react';
 import Layout from '@/components/Layout';
+import ProtectedPage from '@/components/ProtectedPage';
 import PageHeader from '@/components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -97,7 +97,7 @@ const InterviewReport = () => {
     return "bg-red-100";
   };
 
-  return (
+  const reportContent = (
     <Layout>
       <PageHeader 
         title="Interview Report" 
@@ -402,6 +402,12 @@ const InterviewReport = () => {
         </Card>
       </div>
     </Layout>
+  );
+
+  return (
+    <ProtectedPage feature="interview-report">
+      {reportContent}
+    </ProtectedPage>
   );
 };
 
