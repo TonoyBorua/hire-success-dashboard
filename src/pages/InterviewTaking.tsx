@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from '@/components/Layout';
 import PageHeader from '@/components/PageHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,13 +8,16 @@ import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Video, Mic, MicOff, VideoOff, Clock, User, FileText } from 'lucide-react';
+import { Video, Mic, MicOff, VideoOff, Clock, User, FileText, HelpCircle, RotateCcw, Volume2 } from 'lucide-react';
 
 const InterviewTaking = () => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [isRecording, setIsRecording] = useState(false);
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(true);
+  const [showTips, setShowTips] = useState(false);
+  const [countdown, setCountdown] = useState(10);
+  const [isCountdownActive, setIsCountdownActive] = useState(true);
 
   const interview = {
     title: 'Frontend Developer Interview',
@@ -28,11 +31,35 @@ const InterviewTaking = () => {
       "Describe your approach to performance optimization in web applications.",
       "How do you ensure code quality and maintainability in your projects?",
       "What's your experience with testing frameworks and methodologies?"
+    ],
+    tips: [
+      "Focus on specific examples and projects you've worked on. Mention key features like hooks, context API, and component composition patterns.",
+      "Discuss tools like Redux, Zustand, or Context API. Explain when you'd use each and provide real-world examples.",
+      "Talk about techniques like code splitting, lazy loading, memoization, and bundle optimization. Mention tools like webpack or Vite.",
+      "Discuss practices like code reviews, testing strategies, documentation, and architectural patterns you follow.",
+      "Share experience with Jest, React Testing Library, Cypress, or other testing tools. Explain your testing philosophy."
     ]
   };
 
   const progress = ((currentQuestion + 1) / interview.questions.length) * 100;
   const timeProgress = (interview.timeElapsed / interview.duration) * 100;
+
+  // Countdown effect
+  useEffect(() => {
+    if (isCountdownActive && countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (countdown === 0) {
+      setIsCountdownActive(false);
+    }
+  }, [countdown, isCountdownActive]);
+
+  // Reset countdown when question changes
+  useEffect(() => {
+    setCountdown(10);
+    setIsCountdownActive(true);
+    setIsRecording(false);
+  }, [currentQuestion]);
 
   const nextQuestion = () => {
     if (currentQuestion < interview.questions.length - 1) {
@@ -43,6 +70,21 @@ const InterviewTaking = () => {
   const previousQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const startQuestionsOver = () => {
+    setCurrentQuestion(0);
+    setShowTips(false);
+  };
+
+  const handleVoiceOver = () => {
+    // Text-to-speech functionality
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(interview.questions[currentQuestion]);
+      utterance.rate = 0.8;
+      utterance.pitch = 1;
+      speechSynthesis.speak(utterance);
     }
   };
 
@@ -103,8 +145,9 @@ const InterviewTaking = () => {
                     variant={isRecording ? "destructive" : "default"}
                     size="sm"
                     onClick={() => setIsRecording(!isRecording)}
+                    disabled={isCountdownActive}
                   >
-                    {isRecording ? "Stop Recording" : "Start Recording"}
+                    {isRecording ? "Stop Recording" : isCountdownActive ? `Recording in ${countdown}s` : "Start Recording"}
                   </Button>
                 </div>
               </CardContent>
@@ -123,10 +166,30 @@ const InterviewTaking = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                  <p className="text-lg font-medium text-gray-900">
-                    {interview.questions[currentQuestion]}
-                  </p>
+                  <div className="flex justify-between items-start">
+                    <p className="text-lg font-medium text-gray-900 flex-1">
+                      {interview.questions[currentQuestion]}
+                    </p>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleVoiceOver}
+                      className="ml-2"
+                    >
+                      <Volume2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
+
+                {/* Countdown Display */}
+                {isCountdownActive && (
+                  <div className="flex items-center justify-center p-4 bg-orange-50 rounded-lg border border-orange-200">
+                    <Clock className="h-5 w-5 text-orange-600 mr-2" />
+                    <span className="text-lg font-semibold text-orange-600">
+                      Recording starts in {countdown} seconds
+                    </span>
+                  </div>
+                )}
                 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Interview Notes</label>
@@ -205,34 +268,49 @@ const InterviewTaking = () => {
                   <Clock className="mr-2 h-4 w-4" />
                   Extend Time
                 </Button>
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  onClick={startQuestionsOver}
+                >
+                  <RotateCcw className="mr-2 h-4 w-4" />
+                  Start Questions Over
+                </Button>
                 <Button variant="destructive" className="w-full">
                   End Interview
                 </Button>
               </CardContent>
             </Card>
 
-            {/* All Questions */}
+            {/* Show Tips */}
             <Card>
               <CardHeader>
-                <CardTitle>Questions Overview</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {interview.questions.map((question, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentQuestion(index)}
-                      className={`w-full text-left p-2 rounded text-sm transition-colors ${
-                        index === currentQuestion 
-                          ? 'bg-blue-100 text-blue-800 border border-blue-200' 
-                          : 'hover:bg-gray-50'
-                      }`}
-                    >
-                      <span className="font-medium">Q{index + 1}:</span> {question.substring(0, 50)}...
-                    </button>
-                  ))}
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <HelpCircle className="mr-2 h-5 w-5" />
+                    Tips & Guidance
+                  </CardTitle>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowTips(!showTips)}
+                  >
+                    {showTips ? 'Hide' : 'Show'}
+                  </Button>
                 </div>
-              </CardContent>
+              </CardHeader>
+              {showTips && (
+                <CardContent>
+                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                    <h4 className="font-medium text-green-800 mb-2">
+                      Tip for Question {currentQuestion + 1}:
+                    </h4>
+                    <p className="text-sm text-green-700">
+                      {interview.tips[currentQuestion]}
+                    </p>
+                  </div>
+                </CardContent>
+              )}
             </Card>
           </div>
         </div>
