@@ -20,13 +20,15 @@ import {
   Zap,
   Users,
   Clock,
-  BarChart3
+  BarChart3,
+  FilePdf
 } from 'lucide-react';
 
 const ResumeReport = () => {
   const reportData = {
     fileName: "John_Doe_Resume.pdf",
     uploadDate: "2024-01-15",
+    pdfUrl: "/placeholder.svg", // This would be the actual PDF URL in a real app
     atsScore: 78,
     overallGrade: "B+",
     wordCount: 342,
@@ -194,6 +196,51 @@ const ResumeReport = () => {
           </Card>
         </div>
 
+        {/* PDF Viewer Section */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <FilePdf className="mr-2 h-6 w-6 text-red-600" />
+              Resume Preview
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="border rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900">
+              <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b">
+                <div className="flex items-center space-x-2">
+                  <FilePdf className="h-5 w-5 text-red-600" />
+                  <span className="font-medium text-gray-900 dark:text-gray-100">{reportData.fileName}</span>
+                </div>
+                <div className="flex space-x-2">
+                  <Button variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Eye className="h-4 w-4 mr-2" />
+                    Full Screen
+                  </Button>
+                </div>
+              </div>
+              <div className="h-96 flex items-center justify-center">
+                {/* In a real app, this would be an actual PDF viewer component */}
+                <div className="text-center space-y-4">
+                  <FilePdf className="h-16 w-16 text-red-600 mx-auto" />
+                  <div>
+                    <p className="text-lg font-medium text-gray-900 dark:text-gray-100">PDF Preview</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      Resume content would be displayed here
+                    </p>
+                  </div>
+                  <Button variant="outline">
+                    Open Full PDF Viewer
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Section Scores */}
         <Card>
           <CardHeader>
@@ -207,7 +254,7 @@ const ResumeReport = () => {
               {Object.entries(reportData.sections).map(([section, data]) => (
                 <div key={section} className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-gray-900 capitalize">
+                    <h3 className="font-medium text-gray-900 dark:text-gray-100 capitalize">
                       {section.replace('_', ' ')}
                     </h3>
                     <Badge className={getSeverityColor(data.status)}>
@@ -250,14 +297,14 @@ const ResumeReport = () => {
               </div>
             </div>
             
-            <div className="bg-red-50 p-4 rounded-lg border border-red-200">
-              <h4 className="font-medium text-red-900 mb-2 flex items-center">
+            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+              <h4 className="font-medium text-red-900 dark:text-red-100 mb-2 flex items-center">
                 <AlertTriangle className="h-4 w-4 mr-2" />
                 Missing Keywords ({reportData.keywords.missing.length})
               </h4>
               <div className="flex flex-wrap gap-2">
                 {reportData.keywords.missing.map((keyword, index) => (
-                  <Badge key={index} variant="outline" className="bg-white text-red-700 border-red-300">
+                  <Badge key={index} variant="outline" className="bg-white dark:bg-gray-800 text-red-700 dark:text-red-300 border-red-300 dark:border-red-600">
                     {keyword}
                   </Badge>
                 ))}
@@ -284,10 +331,10 @@ const ResumeReport = () => {
                         {getSeverityIcon(improvement.severity)}
                         <span className="ml-1 capitalize">{improvement.severity} Priority</span>
                       </Badge>
-                      <span className="font-medium text-gray-900">{improvement.category}</span>
+                      <span className="font-medium text-gray-900 dark:text-gray-100">{improvement.category}</span>
                     </div>
-                    <h4 className="font-medium text-gray-800 mb-1">{improvement.issue}</h4>
-                    <p className="text-sm text-gray-600">{improvement.suggestion}</p>
+                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">{improvement.issue}</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{improvement.suggestion}</p>
                   </div>
                 </div>
               </div>
@@ -306,7 +353,7 @@ const ResumeReport = () => {
           <CardContent>
             <ul className="space-y-3">
               {reportData.strengths.map((strength, index) => (
-                <li key={index} className="flex items-start text-sm text-gray-600">
+                <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
                   <div className="h-1.5 w-1.5 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
                   {strength}
                 </li>
@@ -326,14 +373,14 @@ const ResumeReport = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(reportData.atsCompatibility).map(([check, result]) => (
-                <div key={check} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <span className="font-medium text-gray-700 capitalize">
+                <div key={check} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <span className="font-medium text-gray-700 dark:text-gray-300 capitalize">
                     {check.replace(/([A-Z])/g, ' $1').trim()}
                   </span>
                   <Badge variant="outline" className={
-                    result.includes('Excellent') ? 'bg-green-100 text-green-800' :
-                    result.includes('Good') ? 'bg-blue-100 text-blue-800' :
-                    'bg-yellow-100 text-yellow-800'
+                    result.includes('Excellent') ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
+                    result.includes('Good') ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
+                    'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
                   }>
                     {result}
                   </Badge>
@@ -354,16 +401,16 @@ const ResumeReport = () => {
           <CardContent>
             <div className="space-y-4">
               <div className="border-l-4 border-red-500 pl-4">
-                <h4 className="font-medium text-red-700">Week 1 - Critical Issues</h4>
-                <p className="text-sm text-gray-600">Add missing keywords to skills and experience sections</p>
+                <h4 className="font-medium text-red-700 dark:text-red-400">Week 1 - Critical Issues</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Add missing keywords to skills and experience sections</p>
               </div>
               <div className="border-l-4 border-yellow-500 pl-4">
-                <h4 className="font-medium text-yellow-700">Week 2 - Organization</h4>
-                <p className="text-sm text-gray-600">Reorganize skills section and fix formatting inconsistencies</p>
+                <h4 className="font-medium text-yellow-700 dark:text-yellow-400">Week 2 - Organization</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Reorganize skills section and fix formatting inconsistencies</p>
               </div>
               <div className="border-l-4 border-blue-500 pl-4">
-                <h4 className="font-medium text-blue-700">Week 3-4 - Enhancement</h4>
-                <p className="text-sm text-gray-600">Add quantifiable achievements and metrics to experience section</p>
+                <h4 className="font-medium text-blue-700 dark:text-blue-400">Week 3-4 - Enhancement</h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Add quantifiable achievements and metrics to experience section</p>
               </div>
             </div>
           </CardContent>
