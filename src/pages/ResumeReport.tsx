@@ -20,8 +20,7 @@ import {
   Zap,
   Users,
   Clock,
-  BarChart3,
-  FilePdf
+  BarChart3
 } from 'lucide-react';
 
 const ResumeReport = () => {
@@ -200,7 +199,7 @@ const ResumeReport = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center">
-              <FilePdf className="mr-2 h-6 w-6 text-red-600" />
+              <FileText className="mr-2 h-6 w-6 text-red-600" />
               Resume Preview
             </CardTitle>
           </CardHeader>
@@ -208,7 +207,7 @@ const ResumeReport = () => {
             <div className="border rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900">
               <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b">
                 <div className="flex items-center space-x-2">
-                  <FilePdf className="h-5 w-5 text-red-600" />
+                  <FileText className="h-5 w-5 text-red-600" />
                   <span className="font-medium text-gray-900 dark:text-gray-100">{reportData.fileName}</span>
                 </div>
                 <div className="flex space-x-2">
@@ -225,7 +224,7 @@ const ResumeReport = () => {
               <div className="h-96 flex items-center justify-center">
                 {/* In a real app, this would be an actual PDF viewer component */}
                 <div className="text-center space-y-4">
-                  <FilePdf className="h-16 w-16 text-red-600 mx-auto" />
+                  <FileText className="h-16 w-16 text-red-600 mx-auto" />
                   <div>
                     <p className="text-lg font-medium text-gray-900 dark:text-gray-100">PDF Preview</p>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
