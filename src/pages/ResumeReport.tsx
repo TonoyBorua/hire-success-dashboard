@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   FileText, 
   Download, 
@@ -135,9 +136,9 @@ const ResumeReport = () => {
         }
       />
       
-      <div className="p-6 max-w-7xl mx-auto space-y-6">
+      <div className="p-6 max-w-7xl mx-auto">
         {/* Overview Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
@@ -195,225 +196,237 @@ const ResumeReport = () => {
           </Card>
         </div>
 
-        {/* PDF Viewer Section */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <FileText className="mr-2 h-6 w-6 text-red-600" />
-              Resume Preview
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="border rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900">
-              <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b">
-                <div className="flex items-center space-x-2">
-                  <FileText className="h-5 w-5 text-red-600" />
-                  <span className="font-medium text-gray-900 dark:text-gray-100">{reportData.fileName}</span>
-                </div>
-                <div className="flex space-x-2">
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Eye className="h-4 w-4 mr-2" />
-                    Full Screen
-                  </Button>
-                </div>
-              </div>
-              <div className="h-96 flex items-center justify-center">
-                {/* In a real app, this would be an actual PDF viewer component */}
-                <div className="text-center space-y-4">
-                  <FileText className="h-16 w-16 text-red-600 mx-auto" />
-                  <div>
-                    <p className="text-lg font-medium text-gray-900 dark:text-gray-100">PDF Preview</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Resume content would be displayed here
-                    </p>
+        {/* Tabbed Content */}
+        <Tabs defaultValue="resume" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="resume">View Resume</TabsTrigger>
+            <TabsTrigger value="report">View Report</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="resume" className="space-y-6">
+            {/* PDF Viewer Section */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <FileText className="mr-2 h-6 w-6 text-red-600" />
+                  Resume Preview
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="border rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-900">
+                  <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 border-b">
+                    <div className="flex items-center space-x-2">
+                      <FileText className="h-5 w-5 text-red-600" />
+                      <span className="font-medium text-gray-900 dark:text-gray-100">{reportData.fileName}</span>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Eye className="h-4 w-4 mr-2" />
+                        Full Screen
+                      </Button>
+                    </div>
                   </div>
-                  <Button variant="outline">
-                    Open Full PDF Viewer
-                  </Button>
+                  <div className="h-[600px] flex items-center justify-center">
+                    {/* In a real app, this would be an actual PDF viewer component */}
+                    <div className="text-center space-y-4">
+                      <FileText className="h-16 w-16 text-red-600 mx-auto" />
+                      <div>
+                        <p className="text-lg font-medium text-gray-900 dark:text-gray-100">PDF Preview</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Resume content would be displayed here
+                        </p>
+                      </div>
+                      <Button variant="outline">
+                        Open Full PDF Viewer
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        {/* Section Scores */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <BarChart3 className="mr-2 h-6 w-6 text-blue-600" />
-              Section Analysis
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(reportData.sections).map(([section, data]) => (
-                <div key={section} className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-gray-900 dark:text-gray-100 capitalize">
-                      {section.replace('_', ' ')}
-                    </h3>
-                    <Badge className={getSeverityColor(data.status)}>
-                      {data.status.replace('_', ' ')}
+          <TabsContent value="report" className="space-y-6">
+            {/* Section Scores */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <BarChart3 className="mr-2 h-6 w-6 text-blue-600" />
+                  Section Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {Object.entries(reportData.sections).map(([section, data]) => (
+                    <div key={section} className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-medium text-gray-900 dark:text-gray-100 capitalize">
+                          {section.replace('_', ' ')}
+                        </h3>
+                        <Badge className={getSeverityColor(data.status)}>
+                          {data.status.replace('_', ' ')}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>Score</span>
+                          <span className={`font-bold ${getScoreColor(data.score)}`}>
+                            {data.score}%
+                          </span>
+                        </div>
+                        <Progress value={data.score} className="h-2" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Keyword Analysis */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Target className="mr-2 h-6 w-6 text-green-600" />
+                  Keyword Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-lg font-medium">Keyword Match Rate</span>
+                  <div className="flex items-center space-x-2">
+                    <span className={`text-2xl font-bold ${getScoreColor((reportData.keywords.matched / reportData.keywords.total) * 100)}`}>
+                      {Math.round((reportData.keywords.matched / reportData.keywords.total) * 100)}%
+                    </span>
+                    <Badge variant="outline" className={getScoreBg((reportData.keywords.matched / reportData.keywords.total) * 100)}>
+                      {reportData.keywords.matched}/{reportData.keywords.total} matched
                     </Badge>
                   </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Score</span>
-                      <span className={`font-bold ${getScoreColor(data.score)}`}>
-                        {data.score}%
-                      </span>
-                    </div>
-                    <Progress value={data.score} className="h-2" />
-                  </div>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Keyword Analysis */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Target className="mr-2 h-6 w-6 text-green-600" />
-              Keyword Analysis
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-medium">Keyword Match Rate</span>
-              <div className="flex items-center space-x-2">
-                <span className={`text-2xl font-bold ${getScoreColor((reportData.keywords.matched / reportData.keywords.total) * 100)}`}>
-                  {Math.round((reportData.keywords.matched / reportData.keywords.total) * 100)}%
-                </span>
-                <Badge variant="outline" className={getScoreBg((reportData.keywords.matched / reportData.keywords.total) * 100)}>
-                  {reportData.keywords.matched}/{reportData.keywords.total} matched
-                </Badge>
-              </div>
-            </div>
-            
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
-              <h4 className="font-medium text-red-900 dark:text-red-100 mb-2 flex items-center">
-                <AlertTriangle className="h-4 w-4 mr-2" />
-                Missing Keywords ({reportData.keywords.missing.length})
-              </h4>
-              <div className="flex flex-wrap gap-2">
-                {reportData.keywords.missing.map((keyword, index) => (
-                  <Badge key={index} variant="outline" className="bg-white dark:bg-gray-800 text-red-700 dark:text-red-300 border-red-300 dark:border-red-600">
-                    {keyword}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Improvements */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Zap className="mr-2 h-6 w-6 text-yellow-600" />
-              Recommended Improvements
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {reportData.improvements.map((improvement, index) => (
-              <div key={index} className="border rounded-lg p-4 space-y-3">
-                <div className="flex items-start justify-between">
-                  <div className="flex-grow">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <Badge className={getSeverityColor(improvement.severity)}>
-                        {getSeverityIcon(improvement.severity)}
-                        <span className="ml-1 capitalize">{improvement.severity} Priority</span>
+                
+                <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-lg border border-red-200 dark:border-red-800">
+                  <h4 className="font-medium text-red-900 dark:text-red-100 mb-2 flex items-center">
+                    <AlertTriangle className="h-4 w-4 mr-2" />
+                    Missing Keywords ({reportData.keywords.missing.length})
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {reportData.keywords.missing.map((keyword, index) => (
+                      <Badge key={index} variant="outline" className="bg-white dark:bg-gray-800 text-red-700 dark:text-red-300 border-red-300 dark:border-red-600">
+                        {keyword}
                       </Badge>
-                      <span className="font-medium text-gray-900 dark:text-gray-100">{improvement.category}</span>
-                    </div>
-                    <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">{improvement.issue}</h4>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">{improvement.suggestion}</p>
+                    ))}
                   </div>
                 </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Strengths */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <CheckCircle className="mr-2 h-6 w-6 text-green-600" />
-              Resume Strengths
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3">
-              {reportData.strengths.map((strength, index) => (
-                <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
-                  <div className="h-1.5 w-1.5 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
-                  {strength}
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+            {/* Improvements */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Zap className="mr-2 h-6 w-6 text-yellow-600" />
+                  Recommended Improvements
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {reportData.improvements.map((improvement, index) => (
+                  <div key={index} className="border rounded-lg p-4 space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-grow">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <Badge className={getSeverityColor(improvement.severity)}>
+                            {getSeverityIcon(improvement.severity)}
+                            <span className="ml-1 capitalize">{improvement.severity} Priority</span>
+                          </Badge>
+                          <span className="font-medium text-gray-900 dark:text-gray-100">{improvement.category}</span>
+                        </div>
+                        <h4 className="font-medium text-gray-800 dark:text-gray-200 mb-1">{improvement.issue}</h4>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{improvement.suggestion}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
 
-        {/* ATS Compatibility */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Users className="mr-2 h-6 w-6 text-purple-600" />
-              ATS Compatibility Check
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {Object.entries(reportData.atsCompatibility).map(([check, result]) => (
-                <div key={check} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-                  <span className="font-medium text-gray-700 dark:text-gray-300 capitalize">
-                    {check.replace(/([A-Z])/g, ' $1').trim()}
-                  </span>
-                  <Badge variant="outline" className={
-                    result.includes('Excellent') ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
-                    result.includes('Good') ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
-                    'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
-                  }>
-                    {result}
-                  </Badge>
+            {/* Strengths */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <CheckCircle className="mr-2 h-6 w-6 text-green-600" />
+                  Resume Strengths
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {reportData.strengths.map((strength, index) => (
+                    <li key={index} className="flex items-start text-sm text-gray-600 dark:text-gray-400">
+                      <div className="h-1.5 w-1.5 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0" />
+                      {strength}
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* ATS Compatibility */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Users className="mr-2 h-6 w-6 text-purple-600" />
+                  ATS Compatibility Check
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.entries(reportData.atsCompatibility).map(([check, result]) => (
+                    <div key={check} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                      <span className="font-medium text-gray-700 dark:text-gray-300 capitalize">
+                        {check.replace(/([A-Z])/g, ' $1').trim()}
+                      </span>
+                      <Badge variant="outline" className={
+                        result.includes('Excellent') ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
+                        result.includes('Good') ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' :
+                        'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200'
+                      }>
+                        {result}
+                      </Badge>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        {/* Action Plan */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Clock className="mr-2 h-6 w-6 text-orange-600" />
-              30-Day Action Plan
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="border-l-4 border-red-500 pl-4">
-                <h4 className="font-medium text-red-700 dark:text-red-400">Week 1 - Critical Issues</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Add missing keywords to skills and experience sections</p>
-              </div>
-              <div className="border-l-4 border-yellow-500 pl-4">
-                <h4 className="font-medium text-yellow-700 dark:text-yellow-400">Week 2 - Organization</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Reorganize skills section and fix formatting inconsistencies</p>
-              </div>
-              <div className="border-l-4 border-blue-500 pl-4">
-                <h4 className="font-medium text-blue-700 dark:text-blue-400">Week 3-4 - Enhancement</h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Add quantifiable achievements and metrics to experience section</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            {/* Action Plan */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Clock className="mr-2 h-6 w-6 text-orange-600" />
+                  30-Day Action Plan
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="border-l-4 border-red-500 pl-4">
+                    <h4 className="font-medium text-red-700 dark:text-red-400">Week 1 - Critical Issues</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Add missing keywords to skills and experience sections</p>
+                  </div>
+                  <div className="border-l-4 border-yellow-500 pl-4">
+                    <h4 className="font-medium text-yellow-700 dark:text-yellow-400">Week 2 - Organization</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Reorganize skills section and fix formatting inconsistencies</p>
+                  </div>
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <h4 className="font-medium text-blue-700 dark:text-blue-400">Week 3-4 - Enhancement</h4>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Add quantifiable achievements and metrics to experience section</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );
