@@ -9,15 +9,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import { 
-  Video, 
-  VideoOff, 
-  Mic, 
-  MicOff, 
-  Phone, 
-  PhoneOff, 
-  Monitor, 
-  Settings, 
+import {
+  Video,
+  VideoOff,
+  Mic,
+  MicOff,
+  Phone,
+  PhoneOff,
+  Monitor,
+  Settings,
   MoreVertical,
   Volume2,
   MessageSquare,
@@ -277,7 +277,7 @@ const InterviewTaking = () => {
               >
                 {audioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
               </Button>
-              
+
               <Button
                 variant={videoEnabled ? "ghost" : "destructive"}
                 size="sm"
@@ -340,8 +340,8 @@ const InterviewTaking = () => {
                 </p>
               </div>
               <div className="h-full overflow-auto bg-white dark:bg-gray-800">
-                <EditorContent 
-                  editor={editor} 
+                <EditorContent
+                  editor={editor}
                   className="prose dark:prose-invert max-w-none prose-sm"
                 />
               </div>
